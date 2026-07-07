@@ -1,0 +1,19 @@
+{
+    "description": "DO NOT DELETE THIS FILE. This file is used to keep track of which files have been synced in the most recent deployment. If you delete this file a resync will need to be done (which can take a while) - read more: https://github.com/SamKirkland/FTP-Deploy-Action",
+    "version": "1.0.0",
+    "generatedTime": 1783444471365,
+    "data": [
+        {
+            "type": "file",
+            "name": "jemea",
+            "size": 14,
+            "hash": "361638cbbb12323d05ef2f719a3462948efa6e02718728652ee3ab74355876c2"
+        },
+        {
+            "type": "file",
+            "name": "prime.txt",
+            "size": 12,
+            "hash": "f9459d4ea053b2b25d460e675149567fdaa5774035e9f2e578b71c0da98a2a07"
+        }
+    ]
+}
