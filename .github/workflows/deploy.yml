@@ -23,13 +23,13 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v6
       #- uses: actions/checkout@2.1.0
-        with:
-          fetch-depth:  2
+        #with:
+          #fetch-depth:  2
 
       # Runs a single command using the runners shell
-      - name: FTP-Deploy-Action
+      - name: Sync files
         #uses: SamKirkland/FTP-Deploy-Action@3.1.1
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
