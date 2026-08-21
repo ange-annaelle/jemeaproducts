@@ -113,14 +113,15 @@
 
 
                             <div class="banner-slider-5 owl-carousel owl-theme dot-none owl-nav-link owl-arrow-top">
-                                @foreach($product->category->products->random(6) as $product)
+                                @foreach($product->category->products->random(6) as $relatedProduct)
+                                @php($image = $relatedProduct->pictures()->first())
 
                                 <div class="owl-items card rounded-0 border-0 p-3">
 
                                     <a href="#" class="posa right-0 top-0 mt-3 me-3"><i class="ti-heart font-xs text-grey-500"></i></a>
                                     <div class="clearfix"></div>
                                     <a href="#" class="d-block text-center" data-bs-toggle="modal" data-bs-target="#productmodal">
-                                        <img src="{{ url('images/product/'.$product->pictures()->first()->picture) }}" alt="product-image" class="w-100 mt-3 mb-3 d-inline-block p-2 pt-0">
+                                        <img src="{{ $image ? url('images/product/'.$image->picture) : url('ui/images/no-image.png') }}" alt="product-image" class="w-100 mt-3 mb-3 d-inline-block p-2 pt-0">
                                     </a>
                                     <div class="star d-inline text-left">
                                         <img src="{{url('ui/images')}}/star.png" alt="star" class="w-10 me-1 float-start">
@@ -131,10 +132,10 @@
                                     </div>
                                     <div class="clearfix"></div>
                                     <h2 class="mt-2">
-                                        <a href="{{ url('product/'.$product->slug) }}" class="text-grey-700 fw-600 font-xsss lh-22 d-block ls-0">{{ $product->name }}</a>
+                                        <a href="{{ url('product/'.$relatedProduct->slug) }}" class="text-grey-700 fw-600 font-xsss lh-22 d-block ls-0">{{ $relatedProduct->name }}</a>
                                     </h2>
                                     <h6 class="font-xss ls-3 fw-700 text-current d-flex">
-                                        <span class="font-xsssss text-grey-500">FCFA</span>{{$product->price}}
+                                        <span class="font-xsssss text-grey-500">FCFA</span>{{$relatedProduct->price}}
                                         <!-- <span class="ms-auto text-grey-500 fw-500 mt-1 font-xsssss">500gm</span> -->
                                     </h6>
                                     <!-- <div class="cart-count d-flex mt-4">

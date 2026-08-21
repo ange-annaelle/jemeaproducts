@@ -3,37 +3,47 @@
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 
 class Product extends Model implements Buyable
 {
+    use HasFactory, Sluggable;
+
+    /**
+     * Les champs autorisés pour l'assignation en masse.
+     */
+    protected $fillable = [
+        'name',
+        'slug', // Ajout indispensable pour autoriser l'insertion du slug
+        'about',
+        'category_id',
+        'sub_category_id',
+        'price',
+        'short_description',
+        'long_description'
+    ];
+
+    /* --- Implémentation de la carte d'achat (Buyable) --- */
     public function getBuyableIdentifier($options = null) {
         return $this->id;
     }
+
     public function getBuyableDescription($options = null) {
         return $this->name;
     }
+
     public function getBuyablePrice($options = null) {
         return $this->price;
     }
+
     public function getBuyableWeight($options = null) {
         return 0;
     }
 
-    use HasFactory;
-    protected $fillable = [
-        'name','about','category_id','sub_category_id','price','short_description','long_description'
-    ];
-
-    use Sluggable;
-
     /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
+     * Configuration pour la génération automatique du Slug.
      */
     public function sluggable(): array
     {
@@ -44,7 +54,7 @@ class Product extends Model implements Buyable
         ];
     }
 
-
+    /* --- Relations --- */
     public function category() {
         return $this->belongsTo(\App\Models\Category::class, 'category_id');
     }
@@ -57,10 +67,11 @@ class Product extends Model implements Buyable
         return $this->hasMany(\App\Models\Picture::class, 'product_id');
     }
 
+    /* --- Override de la suppression pour nettoyer les images --- */
     public function delete() {
-		foreach ($this->pictures as $picture) {
-			$picture->delete();
-		}
-		parent::delete();
-	}
+        foreach ($this->pictures as $picture) {
+            $picture->delete();
+        }
+        return parent::delete();
+    }
 }

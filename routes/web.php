@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('cart/add', 'App\Http\Controllers\CartController@add');
 Route::get('cart/update', 'App\Http\Controllers\CartController@update');
+Route::get('cart/remove', 'App\Http\Controllers\CartController@remove');
 Route::get('cart/empty', 'App\Http\Controllers\CartController@empty');
 Route::get('delete-product-image/{id}', function($id) {
     $picture = \App\Models\Picture::find($id);
-        if($picture->product->pictures()->count() > 1) {
-            $picture->delete();
+    if($picture->product->pictures()->count() > 1) {
+        $picture->delete();
     }
     return redirect()->back()->with('success', "Image was deleted");
 });
@@ -28,44 +30,23 @@ Route::get('placing-order', function() {
 
     $c = "";
     foreach(\Cart::content() as $carted) {
-        $c = $c . " - ".$carted->name . " - ". $carted->price ." x ".$carted->qty." = ". $carted->price*$carted->qty." ";
+        $c .= "- ".$carted->name." - ".$carted->price." x ".$carted->qty." = ".($carted->price*$carted->qty)."\n";
     }
 
+    $message = "Hi, je voudrais valider ma commande Jemea 🙏\n\n";
+    $message .= "JEMEA PRODUCTS - Commande Web/WhatsApp\n";
+    $message .= "- - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+    $message .= "Date : ".date('d/m/Y')."\n";
+    $message .= "Heure : ".date('H:i')."\n";
+    $message .= "- - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+    $message .= $c;
+    $message .= "- - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+    $message .= "Logistique : 1500 FCFA\n";
+    $message .= "Total : ".\Cart::total()." FCFA\n";
+    $message .= "- - - - - - - - - - - - - - - - - - - - - - - - - - -";
 
-    $txt = "𝐉𝐄𝐌𝐄𝐀 𝐏𝐑𝐎𝐃𝐔𝐂𝐓𝐒 𝐖𝐞𝐛/𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 𝐎𝐫𝐝𝐞𝐫⁣
- ⁠- - - - - - - - - - - - - - - - - - - - - - - -  ⁣
-𝘖𝘳𝘥𝘦𝘳 𝘋𝘦𝘵𝘢𝘪𝘭𝘴 ⁣
-𝘋𝘢𝘵𝘦 : 25 January 2025⁣
-𝘛𝘪𝘮𝘦 : 22:50 H⁣
-- - - - - - - - - - - - - - - - - - - - - - - - -⁣
-•⁠  ". $c ."
- - - - - - - - - - - - - - - - - - - - - - - - - -⁣
-𝘓𝘰𝘨𝘪𝘴𝘵𝘪𝘤𝘴 : 1500 ⁣
-𝘛𝘰𝘵𝘢𝘭 : ".\Cart::total()."
- - - - - - - - - - - - - - - - - - - - - - - - - -";
-// return $c;
-    $text = "
-JEMEA PRODUCTS Web/WhatsApp Order
-⁠- - - - - - - - - - - - - - - - - - - - - - - - - - - <br/>
-Order Details<br/>
-Date :".date('Y/m/d')."<br/>
-Time : ".date('H:i:s')."<br/>
-- - - - - - - - - - - - - - - - - - - - - - - - - - -<br/>
-". $c ."
-- - - - - - - - - - - - - - - - - - - - - - - - - - -<br/>
-Logistics : 1500
-Total : ".\Cart::total()." FCFA
-- - - - - - - - - - - - - - - - - - - - - - - - - - -";
-
-// return $text;
-    // return redirect()->to('https://wa.me/237695286829?text=hahr asg as');
-     return redirect()->away('https://api.whatsapp.com/send/?phone=237695286829&txt='.str_replace(array("\r\n", "\n", "\r"), '', $text).'&type=phone_number&app_absent=0');
-     return 0;
-    // return redirect()->away('https://wa.me/237695286829?text=hahr asg as');
-    // return redirect()->back()->with('success', "Image was deleted");
+    return redirect()->away('https://api.whatsapp.com/send/?phone=237694994229&text='.rawurlencode($message).'&type=phone_number&app_absent=0');
 });
-
-
 
 Auth::routes();
 
@@ -80,11 +61,17 @@ Route::resource('dna/products', App\Http\Controllers\ProductController::class)->
 
 Route::group(['prefix' => LaravelLocalization::setLocale()], function()
 {
-	/** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
-	Route::get("/", function(){
+    /** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
+    Route::get("/", function(){
         $data['title'] = 'Home';
         $data['categories'] = \App\Models\Subcategory::all();
         return view('jemea.home')->with($data);
+    });
+
+    Route::get("/fidelity", function(){
+        $data['title'] = 'Ma Fidélité';
+        $data['categories'] = \App\Models\Subcategory::all();
+        return view('jemea.fidelity')->with($data);
     });
 
     Route::get("/contact", function(){
@@ -99,6 +86,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
         return view('jemea.about')->with($data);
     });
 
+    // Route pour la page de description des produits
+    Route::get("/description-produit", [ProductController::class, 'description'])->name('description.produit');
+
     Route::get("/product-category/{slug}", function($slug){
         $data['title'] = 'Product category';
         $data['categories'] = \App\Models\Subcategory::all();
@@ -109,9 +99,17 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     
     Route::get("/product-search", function(\Illuminate\Http\Request $request){
         $data['categories'] = \App\Models\Subcategory::all();
-        
-        $data['title'] = trans('ws.search_for')." ".$request->input('q');
-        $data['products'] = \App\Models\Product::where('name', 'like' ,'%'.$request->input('q').'%')->get();
+
+        $q = $request->input('q');
+        $data['title'] = trans('ws.search_for')." ".$q;
+        $data['products'] = \App\Models\Product::where('name', 'like' ,'%'.$q.'%')
+            ->orWhereHas('subcategory', function($query) use ($q) {
+                $query->where('name', 'like', '%'.$q.'%');
+            })
+            ->orWhereHas('category', function($query) use ($q) {
+                $query->where('name', 'like', '%'.$q.'%');
+            })
+            ->get();
         return view('jemea.search')->with($data);
     });
 

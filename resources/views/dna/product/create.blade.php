@@ -21,6 +21,16 @@
                         </div>
                     @endif
 
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form class="row g-3" action="{{ url('dna/products') }}" enctype="multipart/form-data" method="post" >
                         @csrf
                     
@@ -46,8 +56,16 @@
                     </div>
                     <div class="col-md-3">
                         <label for="image" class="form-label">Product image(s)</label>
-                        <input type="file" class="form-control {{ $errors->has('images') ? ' is-invalid' : '' }}" name="images[]" multiple >
-                        <div class="invalid-feedback">{{ $errors->first('images') }}</div>
+                        <input type="file" class="form-control {{ ($errors->has('images') || $errors->has('images.*')) ? ' is-invalid' : '' }}" name="images[]" multiple >
+                        <div class="invalid-feedback">
+                            {{ $errors->first('images') }}
+                            @foreach ($errors->get('images.*') as $messages)
+                                @foreach ($messages as $message)
+                                    <div>{{ $message }}</div>
+                                @endforeach
+                            @endforeach
+                        </div>
+                        <div class="form-text">Formats acceptés : jpeg, png, jpg, gif — 5 Mo maximum par image.</div>
                     </div>
 
                     <div class="col-12">

@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'jemeaproducts') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -15,6 +15,7 @@
 
     <link href="{{ url('dna-assets/fontawesome-pro-5.15.3-web/css/all.css') }}" rel="stylesheet">
     <script src="{{ url('dna-assets/fontawesome-pro-5.15.3-web/js/all.js') }}"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-..." crossorigin="anonymous">
 
 
     <!-- Scripts -->
@@ -32,7 +33,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'JemeaProducts') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -119,16 +120,20 @@
         </main>
     </div>
 
+    <!-- jQuery (Déjà présent) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
+    <!-- LE SCRIPT BOOTSTRAP MANQUANT (À ajouter absolument) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Trumbowyg (Déjà présent) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.5.0/trumbowyg.min.js" integrity="sha256-uw+P5etc9PQJyLVaZD9Fk2CNlkJs5G0b5u3ugIK7qEQ=" crossorigin="anonymous"></script>
 
     <script type="text/javascript">
     $('#trumbowyg-demo').trumbowyg({
         btns: [['strong', 'em', 'del'], '|', 'insertImage',['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'], ['unorderedList', 'orderedList'], ['formatting'], 'link' ],
         autogrow: true,
-        emantic: false,
+        emantic: false, // Attention, petite faute de frappe ici dans ton code d'origine (c'est "semantic"), mais laisse ainsi si ça fonctionne
         svgPath: '{{url('icons.svg')}}',
     });
     </script>

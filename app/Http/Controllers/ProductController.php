@@ -64,7 +64,7 @@ class ProductController extends Controller
             // 'price' => 'numeric',
             'sub_category_id' => 'required',
             'images' => 'required',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,jpg|max:1024',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,jpg|max:5120',
             'short_description' => 'required',
             'long_description' => 'required'
         ]);
@@ -98,7 +98,7 @@ class ProductController extends Controller
             $picture = new Picture();
             $picture->picture = $fileName;
             $picture->product_id = $product->id;
-            $picture->name = $product->slug." Image ".$index+1 ;
+            $picture->name = $product->slug." Image ".($index+1) ;
             $picture->save();
         }
 
@@ -169,7 +169,7 @@ class ProductController extends Controller
             'name' => 'required',
             'price' => 'numeric',
             'sub_category_id' => 'required',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,jpg|max:1024',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,jpg|max:5120',
             'short_description' => 'required',
             'long_description' => 'required'
         ]);
@@ -198,7 +198,7 @@ class ProductController extends Controller
             $picture = new Picture();
             $picture->picture = $fileName;
             $picture->product_id = $product->id;
-            $picture->name = $product->slug." Image ".$index+1 ;
+            $picture->name = $product->slug." Image ".($index+1) ;
             $picture->save();
         }
         }
@@ -218,4 +218,17 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->to('dna/products')->with('success', 'Product was successfully deleted with all images');
     }
+    /**
+     * Display the product description/benefits page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function description()
+    {
+        $title = 'Description des produits';
+        $products = Product::all(); // Récupère tous les produits pour la vue
+
+        return view('jemea.description-produit', compact('title', 'products'));
+    }
+    
 }

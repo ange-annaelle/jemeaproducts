@@ -32,12 +32,13 @@
 
 
                         @foreach($category->products as $product)
+                            @php($image = $product->pictures()->first())
                             <div class="col-lg-4 col-md-4 col-xs-6 p-4 border-end rounded-0 posr">
                                 <!-- <span class="ls-3 font-xsssss text-white text-uppercase bg-current fw-700 p-2 lh-1 d-inline-block posa rounded-3 left-15 top-15">30% off</span> -->
                                 <a href="{{ url('product/'.$product->slug) }}" class="posa right-0 top-0 mt-3 me-3"><i class="ti-heart font-xs text-grey-500"></i></a>
                                 <div class="clearfix"></div>
                                 <a href="{{ url('product/'.$product->slug) }}" class="d-block text-center" data-bs-toggle="modal" data-bs-target="#productmodal">
-                                    <img src="{{ url('images/product/'.$product->pictures()->first()->picture) }}" alt="product-image" class="w-100 mt-3 mb-3 d-inline-block p-2 pt-0">
+                                    <img src="{{ $image ? url('images/product/'.$image->picture) : url('ui/images/no-image.png') }}" alt="product-image" class="w-100 mt-3 mb-3 d-inline-block p-2 pt-0">
                                 </a>
                                 <div class="star d-inline text-left">
                                     <img src="{{url('ui/images')}}/star.png" alt="star" class="w-10 me-1 float-start">
